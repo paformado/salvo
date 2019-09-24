@@ -3,36 +3,34 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class Player {
+public class Game {
 
-    //Atributos
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GeneratedValue (strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
+    private Date creationDate;
 
-    private String userName;
-
-    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
 
-    //constructor
-    public Player() {
+    public Game() {
     }
 
-    public Player(String userName) {
-        this.userName = userName;
+    public Game(Date creationDate){
+        this.creationDate = creationDate;
     }
 
     public long getId() {
         return id;
     }
 
-    public String getUserName() {
-        return userName;
+    public Date getCreationDate(){
+        return creationDate;
     }
 
     public Set<GamePlayer> getGamePlayers() {
