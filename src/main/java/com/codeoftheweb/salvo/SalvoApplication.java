@@ -18,7 +18,8 @@ public class SalvoApplication {
 	@Bean
 	public CommandLineRunner initData (PlayerRepository playerRepository,
 									   GameRepository gameRepository,
-									   GamePlayerRepository gamePlayerRepository){
+									   GamePlayerRepository gamePlayerRepository,
+									   ShipRepository shipRepository){
 		return (args) ->{
 			//guarda jugadores de prueba
 			Player p1 = new Player("j.bauer@ctu.gov");
@@ -54,8 +55,14 @@ public class SalvoApplication {
 			GamePlayer gp12 = new GamePlayer(date, g7, p4);
 			GamePlayer gp13 = new GamePlayer(date, g8, p3);
 			GamePlayer gp14 = new GamePlayer(date, g8, p4);
-			gamePlayerRepository.saveAll(Arrays.asList(gp1,gp2,gp3,gp4,gp5,gp6,gp7,gp8));
+			gamePlayerRepository.saveAll(Arrays.asList(gp1,gp2,gp3,gp4,gp5,gp6,gp7,gp8,gp9,gp10,gp11,gp12,gp13,gp14));
 
+			Ship ship1 = new Ship(gp1,"Destroyer", Arrays.asList("H2","H3","H4"));
+			Ship ship2 = new Ship(gp1,"Submarine", Arrays.asList("E1","F1","G1"));
+			Ship ship3 = new Ship(gp1,"Patrol Boat", Arrays.asList("B5","B4"));
+			Ship ship4 = new Ship(gp2,"Destroyer", Arrays.asList("B5","C5","D5"));
+			Ship ship5 = new Ship(gp2,"Patrol Boat", Arrays.asList("F1","F2"));
+			shipRepository.saveAll(Arrays.asList(ship1,ship2,ship3,ship4,ship5));
 		};
 
         }
