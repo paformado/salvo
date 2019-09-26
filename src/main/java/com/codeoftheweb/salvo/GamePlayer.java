@@ -3,9 +3,7 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class GamePlayer {
@@ -22,6 +20,7 @@ public class GamePlayer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_id")
     private Player player;
+
 
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
     Set<Ship> ships = new HashSet<>();
@@ -53,5 +52,21 @@ public class GamePlayer {
 
     public Set<Ship> getShips() {
         return ships;
+    }
+
+    public Map<String, Object> makeGamePlayersDTO() {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("gamePlayer_id", this.getId());
+        dto.put("player", this.getPlayer().makePlayerDTO());
+        return dto;
+    }
+
+    public Map<String, Object> makeGamePlayersDTO2() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.game.getId());
+        dto.put("creationDate", this.game.getCreationDate());
+        dto.put("gamePlayers", this.game.getAllGamePlayers(game.getGamePlayers()));
+        dto.put("ships", getAllShips(this.getShips()));//FALTA CREAR GETALLSHIPS
+        return dto;
     }
 }

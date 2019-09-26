@@ -1,10 +1,10 @@
 package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
+import sun.awt.image.ImageWatched;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Ship {
@@ -19,14 +19,18 @@ public class Ship {
     @JoinColumn(name = "gamePlayer_ID")
     private GamePlayer gamePlayer;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "game")
+    private Game game;
+
     @ElementCollection
     @Column(name = "shipLocations")
-    private List<String> shipLocations = new ArrayList<>();
+    private Set<String> shipLocations = new LinkedHashSet<>();
 
     public Ship() {
     }
 
-    public Ship(GamePlayer gamePlayer, String shipType, List<String> shipLocations) {
+    public Ship(GamePlayer gamePlayer, String shipType, Set<String> shipLocations) {
         this.gamePlayer = gamePlayer;
         this.shipType = shipType;
         this.shipLocations = shipLocations;
@@ -44,7 +48,14 @@ public class Ship {
         return gamePlayer;
     }
 
-    public List getLocations() {
+    public Set<String> getShipLocations() {
         return shipLocations;
+    }
+
+    public Map<String, Object> makeShipsDTO() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("type", this.getShipType());
+        dto.put("location", this.getShipLocations());
+        return dto;
     }
 }
