@@ -21,6 +21,9 @@ public class Player {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
 
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    Set<Score> scores;
+
     //constructor
     public Player() {
     }
@@ -39,6 +42,10 @@ public class Player {
 
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
+    }
+
+    public Set<Score> getScores() {
+        return scores;
     }
 
     public Map<String, Object> makePlayerDTO() {

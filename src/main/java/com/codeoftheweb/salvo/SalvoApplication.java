@@ -21,7 +21,8 @@ public class SalvoApplication {
 									   GameRepository gameRepository,
 									   GamePlayerRepository gamePlayerRepository,
 									   ShipRepository shipRepository,
-									   SalvoRepository salvoRepository){
+									   SalvoRepository salvoRepository,
+									   ScoreRepository scoreRepository){
 		return (args) ->{
 			//guarda jugadores de prueba
 			Player p1 = new Player("j.bauer@ctu.gov");
@@ -112,6 +113,19 @@ public class SalvoApplication {
 			Salvo sa21 = new Salvo(3, gp10, new HashSet<>(Arrays.asList("H1", "H8")));
 			salvoRepository.saveAll(Arrays.asList(sa1, sa2, sa3, sa4, sa5, sa6, sa7, sa8, sa9, sa10,
 					sa11, sa12, sa13, sa14, sa15, sa16, sa17, sa18, sa19, sa20, sa21));
+
+			Score sc1 = new Score(g1,p1,1, date);
+			Score sc2 = new Score(g1,p2,0, date);
+			Score sc3 = new Score(g2,p1,0.5, date);
+			Score sc4 = new Score(g2,p2,0.5, date);
+			Score sc5 = new Score(g3,p2,1, date);
+			Score sc6 = new Score(g3,p4,0, date);
+			Score sc7 = new Score(g4,p2,0.5, date);
+			Score sc8 = new Score(g4,p1,0.5, date);
+			scoreRepository.saveAll(Arrays.asList(sc1,sc2,sc3,sc4,sc5,sc6,sc7,sc8));
+
+
+
 		};
 
 

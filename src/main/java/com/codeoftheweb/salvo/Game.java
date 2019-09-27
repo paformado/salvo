@@ -21,6 +21,9 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<Ship> ships = new HashSet<>();
 
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    Set<Score> scores;
+
     public Game() {
     }
 
@@ -44,11 +47,16 @@ public class Game {
         return ships;
     }
 
+    public Set<Score> getScores() {
+        return scores;
+    }
+
     public Map<String, Object> makeGamesDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("creationDate", this.getCreationDate());
         dto.put("gamePlayers", getAllGamePlayers(this.getGamePlayers()));
+        dto.put("scores", this.getScores());//Revisar esto
         return dto;
     }
 
@@ -65,4 +73,6 @@ public class Game {
                 .map(salvo -> salvo.makeSalvoDTO())
                 .collect(Collectors.toList());
     }
+
+
 }
