@@ -49,13 +49,20 @@ public class Game {
         dto.put("id", this.getId());
         dto.put("creationDate", this.getCreationDate());
         dto.put("gamePlayers", getAllGamePlayers(this.getGamePlayers()));
-        dto.put("ships", this.getShips());
         return dto;
     }
 
     public List<Map<String, Object>> getAllGamePlayers(Set<GamePlayer> gamePlayers){
         return gamePlayers.stream()
                 .map(gamePlayer -> gamePlayer.makeGamePlayersDTO())
+                .collect(Collectors.toList());
+    }
+
+    public List<Object> getSalvoesDTO(){
+        return this.getGamePlayers()
+                .stream()
+                .flatMap(gamePlayer -> gamePlayer.getSalvoes().stream())
+                .map(salvo -> salvo.makeSalvoDTO())
                 .collect(Collectors.toList());
     }
 }
