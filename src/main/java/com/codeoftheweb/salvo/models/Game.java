@@ -49,7 +49,7 @@ public class Game {
         dto.put("id", this.getId());
         dto.put("creationDate", this.getCreationDate());
         dto.put("gamePlayers", getAllGamePlayers(this.getGamePlayers()));
-        dto.put("scores", this.getAllScoresFromGamePlayers());//Revisar esto
+        dto.put("scores", this.getAllScoresFromGamePlayers());
         return dto;
     }
 
