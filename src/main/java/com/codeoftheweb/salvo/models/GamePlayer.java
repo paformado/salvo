@@ -1,4 +1,4 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -29,6 +29,9 @@ public class GamePlayer {
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
     Set<Salvo> salvos = new HashSet<>();
 
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    Set<Score> scores = new HashSet<>();
+
     public GamePlayer() {
     }
 
@@ -40,10 +43,6 @@ public class GamePlayer {
 
     public long getId() {
         return id;
-    }
-
-    public Date getJoinDate() {
-        return joinDate;
     }
 
     public Player getPlayer() {
@@ -60,6 +59,10 @@ public class GamePlayer {
 
     public Set<Salvo> getSalvoes() {
         return salvos;
+    }
+
+    public Set<Score> getScores() {
+        return scores;
     }
 
     public Map<String, Object> makeGamePlayersDTO() {
@@ -85,9 +88,10 @@ public class GamePlayer {
                 .collect(Collectors.toList());
     }
 
-    public List<Map<String, Object>> getAllSalvoes(Set<Salvo> salvoes){
-        return salvoes.stream()
-                .map(salvo -> salvo.makeSalvoDTO())
+    public List<Map<String, Object>> getAllScores(Set<Score> scores){
+        return this.getScores()
+                .stream()
+                .map(score -> score.makeScoreDTO())
                 .collect(Collectors.toList());
     }
 

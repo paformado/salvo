@@ -1,7 +1,6 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import sun.awt.image.ImageWatched;
 
 import javax.persistence.*;
 import java.util.*;
@@ -18,10 +17,6 @@ public class Ship {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gamePlayer_ID")
     private GamePlayer gamePlayer;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "game")
-    private Game game;
 
     @ElementCollection
     @Column(name = "shipLocations")
@@ -42,10 +37,6 @@ public class Ship {
 
     public String getShipType() {
         return shipType;
-    }
-
-    public GamePlayer getGamePlayer() {
-        return gamePlayer;
     }
 
     public Set<String> getShipLocations() {

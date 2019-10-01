@@ -1,5 +1,7 @@
 package com.codeoftheweb.salvo;
 
+import com.codeoftheweb.salvo.models.*;
+import com.codeoftheweb.salvo.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,11 +20,11 @@ public class SalvoApplication {
 
 	@Bean
 	public CommandLineRunner initData (PlayerRepository playerRepository,
-									   GameRepository gameRepository,
-									   GamePlayerRepository gamePlayerRepository,
-									   ShipRepository shipRepository,
-									   SalvoRepository salvoRepository,
-									   ScoreRepository scoreRepository){
+                                       GameRepository gameRepository,
+                                       GamePlayerRepository gamePlayerRepository,
+                                       ShipRepository shipRepository,
+                                       SalvoRepository salvoRepository,
+                                       ScoreRepository scoreRepository){
 		return (args) ->{
 			//guarda jugadores de prueba
 			Player p1 = new Player("j.bauer@ctu.gov");

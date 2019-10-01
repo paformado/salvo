@@ -1,4 +1,4 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -17,9 +17,6 @@ public class Game {
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
-
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-    Set<Ship> ships = new HashSet<>();
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<Score> scores;
@@ -43,10 +40,6 @@ public class Game {
         return gamePlayers;
     }
 
-    public Set<Ship> getShips(){
-        return ships;
-    }
-
     public Set<Score> getScores() {
         return scores;
     }
@@ -56,7 +49,7 @@ public class Game {
         dto.put("id", this.getId());
         dto.put("creationDate", this.getCreationDate());
         dto.put("gamePlayers", getAllGamePlayers(this.getGamePlayers()));
-        dto.put("scores", this.getScores());//Revisar esto
+        dto.put("scores", this.getAllScoresFromGamePlayers());//Revisar esto
         return dto;
     }
 
@@ -74,5 +67,20 @@ public class Game {
                 .collect(Collectors.toList());
     }
 
+   public List<Map<String, Object>> getAllScores(Set<Score> scores){
+        return this.getScores()
+                .stream()
+                .map(score -> score.makeScoreDTO())
+                .collect(Collectors.toList());
+    }
 
+    public List<Map<String, Object>> getAllScoresFromGamePlayers(){
+        if(!scores.isEmpty()) {
+            return this.scores.stream()
+                    .map(score -> score.makeScoreDTO())
+                    .collect(Collectors.toList());
+        }else{
+            return null;
+        }
+    }
 }

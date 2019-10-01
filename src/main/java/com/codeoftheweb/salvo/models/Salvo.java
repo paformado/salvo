@@ -1,10 +1,9 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class Salvo {
@@ -42,10 +41,6 @@ public class Salvo {
 
     public Set<String> getSalvoLocations() {
         return salvoLocations;
-    }
-
-    public GamePlayer getGamePlayer() {
-        return gamePlayer;
     }
 
     public Map<String, Object> makeSalvoDTO() {

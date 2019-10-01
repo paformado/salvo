@@ -1,7 +1,6 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.exception.DataException;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,6 +24,10 @@ public class Score {
     @JoinColumn(name = "player_id")
     private Player player;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "gamePlayer_id")
+    private GamePlayer gamePlayer;
+
     public Score() {
     }
 
@@ -33,7 +36,6 @@ public class Score {
         this.player = player;
         this.score = score;
         this.finishDate = finishDate;
-
     }
 
     public long getId() {
@@ -42,10 +44,6 @@ public class Score {
 
     public double getScore() {
         return score;
-    }
-
-    public Date getFinishDate() {
-        return finishDate;
     }
 
     public Game getGame() {
@@ -58,8 +56,9 @@ public class Score {
 
     public Map<String, Object> makeScoreDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("player1", getScore());
-        dto.put("player2", getScore());//Dejamos aca, habria que borrar esto
+        dto.put("player", getPlayer().getId());
+        dto.put("score", getScore());
         return dto;
     }
+
 }
