@@ -24,12 +24,15 @@ public class Player {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<Score> scores;
 
+    private String password;
+
     //constructor
     public Player() {
     }
 
-    public Player(String userName) {
+    public Player(String userName, String password) {
         this.userName = userName;
+        this.password = password;
     }
 
     public long getId() {
@@ -42,6 +45,18 @@ public class Player {
 
     public Set<Score> getScores() {
         return scores;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Map<String, Object> makePlayerDTO() {
@@ -70,21 +85,15 @@ public class Player {
 
 
     public long getWinScore(){
-        return this.getScores().stream()
-                .filter(score -> score.getScore()==1.0D)
-                .count();
+        return this.getScores().stream().filter(score -> score.getScore()==1.0D).count();
     }
 
     public long getLostScore(){
-        return this.getScores().stream()
-                .filter(score -> score.getScore()==0.0D)
-                .count();
+        return this.getScores().stream().filter(score -> score.getScore()==0.0D).count();
     }
 
     public long getTiedScore(){
-        return this.getScores().stream()
-                .filter(score -> score.getScore()==0.5D)
-                .count();
+        return this.getScores().stream().filter(score -> score.getScore()==0.5D).count();
     }
 
 }

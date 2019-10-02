@@ -20,6 +20,7 @@ public class SalvoController {
     private GameRepository gameRepository;
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
+    @Autowired
     private PlayerRepository playerRepository;
 
     @RequestMapping("/games")
@@ -30,7 +31,7 @@ public class SalvoController {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping("/leaderboard")
+    @RequestMapping("/leaderBoard")
     public List<Map<String, Object>> getLeaderBoard() {
         return playerRepository.findAll()
                 .stream()
