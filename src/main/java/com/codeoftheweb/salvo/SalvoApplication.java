@@ -175,8 +175,6 @@ public class SalvoApplication {
 				}
 			});
 		}
-
-
 	}
 
 	@EnableWebSecurity
@@ -187,7 +185,8 @@ public class SalvoApplication {
 		protected void configure(HttpSecurity http) throws Exception{
 			http.authorizeRequests()
 					.antMatchers("/web/**").permitAll()
-					.antMatchers("/**").hasAnyAuthority("USER");
+					.antMatchers("/api/game_view/**").hasAuthority("USER")
+			        .antMatchers("/api/games").permitAll();
 
 			http.formLogin()
 					.usernameParameter("name")
