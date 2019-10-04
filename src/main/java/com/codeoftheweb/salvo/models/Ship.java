@@ -46,7 +46,7 @@ public class Ship {
     public Map<String, Object> makeShipsDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("type", this.getShipType());
-        dto.put("shipLocations", this.getShipLocations());
+        dto.put("locations", this.getShipLocations());
         return dto;
     }
 }
