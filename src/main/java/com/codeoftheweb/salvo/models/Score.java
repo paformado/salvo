@@ -54,12 +54,20 @@ public class Score {
         return player;
     }
 
-    public Map<String, Object> makeScoreDTO() {
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
+    }
+
+    /*public Map<String, Object> makeScoreDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("player", getPlayer().getId());
         dto.put("score", getScore());
         dto.put("finishDate", finishDate);
         return dto;
-    }
+    }*/
 
 }

@@ -19,10 +19,10 @@ public class Player {
     private String userName;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-    Set<GamePlayer> gamePlayers;
+    private Set<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-    Set<Score> scores;
+    private Set<Score> scores;
 
     private String password;
 
@@ -55,10 +55,15 @@ public class Player {
         return password;
     }
 
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
+    //ESTO ES PARA /games
     public Map<String, Object> makePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());
@@ -66,7 +71,7 @@ public class Player {
         return dto;
     }
 
-    public Map<String, Object> makePlayerScoreDTO() {
+    /*public Map<String, Object> makePlayerScoreDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         Map<String, Object> score = new LinkedHashMap<>();
         dto.put("id", this.getId());
@@ -77,7 +82,7 @@ public class Player {
             score.put("lost", this.getLostScore());
             score.put("tied", this.getTiedScore());
         return dto;
-    }
+    }*/
 
     public Double getTotalScore(){
         return this.getWinScore()*1.0D+this.getTiedScore()*0.5D+this.getLostScore()+0.0D;

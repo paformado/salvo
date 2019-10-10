@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.Authentication;
 
 import javax.persistence.*;
 import java.util.*;
@@ -24,13 +25,13 @@ public class GamePlayer {
 
 
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
-    Set<Ship> ships = new HashSet<>();
+    private Set<Ship> ships = new HashSet<>();
 
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
-    Set<Salvo> salvos = new HashSet<>();
+    private Set<Salvo> salvos = new HashSet<>();
 
-    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
-    Set<Score> scores = new HashSet<>();
+    /*@OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    private Set<Score> scores = new HashSet<>();*/
 
     public GamePlayer() {
     }
@@ -61,24 +62,37 @@ public class GamePlayer {
         return salvos;
     }
 
-    public Set<Score> getScores() {
+    /*public Set<Score> getScores() {
         return scores;
+    }*/
+
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
     }
 
-    public Map<String, Object> makeGamePlayersDTO() {
+    public Date getJoinDate() {
+        return joinDate;
+    }
+
+    public Set<Salvo> getSalvos() {
+        return salvos;
+    }
+
+    /*public Map<String, Object> makeGamePlayersDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());
         dto.put("player", this.getPlayer().makePlayerDTO());
         return dto;
     }
 
-    public Map<String, Object> makeGamePlayersDTO2() {
+    public Map<String, Object> makeGameViewDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", this.game.getId());
         dto.put("created", this.game.getCreationDate());
         dto.put("gamePlayers", this.game.getAllGamePlayers(game.getGamePlayers()));
         dto.put("ships", getAllShips(this.getShips()));
         dto.put("salvoes", game.getSalvoesDTO());
+        //dto.put("hits", makeHitsDTO());
         return dto;
     }
 
@@ -86,14 +100,18 @@ public class GamePlayer {
         return ships.stream()
                 .map(ship -> ship.makeShipsDTO())
                 .collect(Collectors.toList());
-    }
+    }*/
 
-    public List<Map<String, Object>> getAllScores(Set<Score> scores){
+    /*public List<Map<String, Object>> getAllScores(Set<Score> scores){
         return this.getScores()
                 .stream()
                 .map(score -> score.makeScoreDTO())
                 .collect(Collectors.toList());
-    }
+    }*/
 
+
+    /*public List<String> getHitLocations(GamePlayer gamePlayer){
+        return gamePlayer.getSalvos().stream().filter(salvo -> salvo.getSalvoLocations() == getOpponent(gamePlayer).getAllShips(ships).get(shi)).collect(Collectors.toList());
+    }*/
 
 }

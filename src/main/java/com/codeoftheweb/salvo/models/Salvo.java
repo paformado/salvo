@@ -22,7 +22,7 @@ public class Salvo {
     @JoinColumn(name = "gamePlayer_ID")
     private GamePlayer gamePlayer;
 
-    public Salvo(){
+    public Salvo() {
     }
 
     public Salvo(int turnNumber, GamePlayer gamePlayer, Set<String> salvoLocations) {
@@ -43,13 +43,21 @@ public class Salvo {
         return salvoLocations;
     }
 
-    public Map<String, Object> makeSalvoDTO() {
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
+    }
+
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
+    }
+
+    /*public Map<String, Object> makeSalvoDTO() {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("turn", this.getTurnNumber());
-        dto.put("player", this.getId());
+        dto.put("player", this.gamePlayer.getPlayer().getId());
         dto.put("locations", this.getSalvoLocations());
         return dto;
-    }
+    }*/
 
 
 }
