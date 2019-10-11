@@ -1,11 +1,9 @@
 package com.codeoftheweb.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.Authentication;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class GamePlayer {
@@ -77,41 +75,4 @@ public class GamePlayer {
     public Set<Salvo> getSalvos() {
         return salvos;
     }
-
-    /*public Map<String, Object> makeGamePlayersDTO() {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", this.getId());
-        dto.put("player", this.getPlayer().makePlayerDTO());
-        return dto;
-    }
-
-    public Map<String, Object> makeGameViewDTO() {
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.game.getId());
-        dto.put("created", this.game.getCreationDate());
-        dto.put("gamePlayers", this.game.getAllGamePlayers(game.getGamePlayers()));
-        dto.put("ships", getAllShips(this.getShips()));
-        dto.put("salvoes", game.getSalvoesDTO());
-        //dto.put("hits", makeHitsDTO());
-        return dto;
-    }
-
-    public List<Map<String, Object>> getAllShips(Set<Ship> ships){
-        return ships.stream()
-                .map(ship -> ship.makeShipsDTO())
-                .collect(Collectors.toList());
-    }*/
-
-    /*public List<Map<String, Object>> getAllScores(Set<Score> scores){
-        return this.getScores()
-                .stream()
-                .map(score -> score.makeScoreDTO())
-                .collect(Collectors.toList());
-    }*/
-
-
-    /*public List<String> getHitLocations(GamePlayer gamePlayer){
-        return gamePlayer.getSalvos().stream().filter(salvo -> salvo.getSalvoLocations() == getOpponent(gamePlayer).getAllShips(ships).get(shi)).collect(Collectors.toList());
-    }*/
-
 }
