@@ -59,7 +59,7 @@ public class SalvoController {
         }else {
             Player creatorPlayer = playerRepository.findByUserName(authentication.getName());
             Date newDate = new Date();
-            Game newGame = gameRepository.save(new Game());
+            Game newGame = gameRepository.save(new Game(newDate));
             GamePlayer newGamePlayer = gamePlayerRepository.save(new GamePlayer(newDate,newGame,creatorPlayer));
             long gamePlayerId = newGamePlayer.getId();
             return new ResponseEntity<>(makeMap("gpid", gamePlayerId), HttpStatus.CREATED);
@@ -360,24 +360,61 @@ public class SalvoController {
             return "PLACESHIPS";
         }
         if (getOpponent(gamePlayer) == null) {
-            return "ESPERANDO OPONENTE";
+            return "WAITINGFOROPP";
         }
 
         if ((gamePlayer.getSalvos().size() == getOpponent(gamePlayer).getSalvos().size()) &&
-                (gamePlayer.getShips().size() > 0 && getOpponent(gamePlayer).getShips().size() > 0)) {
+                (getSunks(getOpponent(gamePlayer)) < 17 && getSunks(gamePlayer) < 17)) {
             return "PLAY";
-        } else if ((gamePlayer.getSalvos().size() > getOpponent(gamePlayer).getSalvos().size())) {
-            return "WAITINGFOROPP";
-        } else if (getOpponent(gamePlayer).getShips().size() == 0 || gamePlayer.getShips().size() == 0) {
-            return "GAME OVER";
         }
 
-        if (getOpponent(gamePlayer).getShips().size() == 0 && gamePlayer.getShips().size() > 0) {
-            return "WON";
-        } else if (getOpponent(gamePlayer).getShips().size() > 0 && gamePlayer.getShips().size() == 0) {
-            return "LOST";
-        } else {
-            return "TIE";
+        if ((gamePlayer.getSalvos().size() > getOpponent(gamePlayer).getSalvos().size())) {
+            return "WAIT";
         }
+
+        Date date = new Date();
+
+        if (getSunks(getOpponent(gamePlayer)) == 17 && getSunks(gamePlayer) < 17) {
+                Score newScore = new Score(gamePlayer.getGame(), gamePlayer.getPlayer(), 1, date);
+                if (!existsScore(newScore, gamePlayer.getGame()))
+                    scoreRepository.save(newScore);
+                return "WON";
+            } else if (getSunks(gamePlayer) == 17 && getSunks(getOpponent(gamePlayer)) < 17) {
+                Score newScore = new Score(gamePlayer.getGame(), gamePlayer.getPlayer(), 0, date);
+                if (!existsScore(newScore, gamePlayer.getGame()))
+                    scoreRepository.save(newScore);
+                return "LOST";
+            } else if (getSunks(gamePlayer) == 17 && getSunks(getOpponent(gamePlayer)) == 17){
+                Score newScore = new Score(gamePlayer.getGame(), gamePlayer.getPlayer(), 0.5, date);
+                if (!existsScore(newScore, gamePlayer.getGame()))
+                    scoreRepository.save(newScore);
+                return "TIE";
+            } else
+                return "WAIT";
+
+        }
+
+        private int getSunks(GamePlayer gamePlayer){
+        GamePlayer opp = getOpponent(gamePlayer);
+        List <String> ships = new ArrayList<>();
+        List <String> salvoes = new ArrayList<>();
+        for(Ship ship : gamePlayer.getShips()){
+            ships.addAll(ship.getLocations());
+        }
+        for (Salvo salvo : opp.getSalvos()){
+            salvoes.addAll(salvo.getSalvoLocations());
+        }
+        ships.retainAll(salvoes);
+        return ships.size();
+        }
+
+    private Boolean existsScore(Score score, Game game) {
+
+        Set<Score> scores = game.getScores();
+        for (Score s : scores) {
+            if (score.getPlayer().getUserName().equals(s.getPlayer().getUserName()))
+                return true;
+        }
+        return false;
     }
 }
