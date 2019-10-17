@@ -202,7 +202,9 @@ function showSelf (gamePlayerData) {
 
 
     gamePlayerData.ships.forEach(function(ship) {
-    ship.locations   =   ship.locations.sort();
+         const sortAlphaNum = (a, b) => a.localeCompare(b, 'en', { numeric: true })
+         ship.locations   =   ship.locations.sort(sortAlphaNum);
+    //ship.locations   =   ship.locations.sort();
 
         let firstCellID;
         firstCellID = "#p1_" + ship.locations[0];
@@ -421,6 +423,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
     }
 
     hitsArray.forEach(function (playTurn) {
+
         let hitsReport = "";
         if (playTurn.damages.carrierHits > 0){
             hitsReport += "Carrier " + addDamagesIcons(playTurn.damages.carrierHits, "hit") + " ";
@@ -471,7 +474,6 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (hitsReport === ""){
             hitsReport = "All salvoes missed! No damages!"
         }
-
         $('<tr><td class="textCenter">' + playTurn.turn + '</td><td>' + hitsReport + '</td></tr>').prependTo(tableId);
 
     });

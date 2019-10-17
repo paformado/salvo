@@ -66,13 +66,16 @@ public class SalvoController {
         }
     }
 
-     @RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
+    @RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(@PathVariable long gameId, Authentication authentication){
         if (isGuest(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
         Game requestedGameId = gameRepository.findById(gameId).get();
+        if(currentPlayer.getId() == requestedGameId.getGamePlayers().stream().findFirst().get().getPlayer().getId()){
+            return new ResponseEntity<>(makeMap2("error", "Player is already in the game"), HttpStatus.FORBIDDEN);
+        }
         if(requestedGameId == null){
             return new ResponseEntity<>(makeMap("No such game", gameId), HttpStatus.FORBIDDEN);
         }
@@ -116,7 +119,7 @@ public class SalvoController {
         }
         salvo.setGamePlayer(gamePlayer);
         salvoRepository.save(new Salvo(salvoes.size()+1, gamePlayer, salvo.getSalvoLocations()));
-        return new ResponseEntity<>(makeMap2("addSalvoes","Salvoes saved"), HttpStatus.CREATED);
+        return new ResponseEntity<>(makeMap2("OK","Salvoes saved"), HttpStatus.CREATED);
     }
 
     @RequestMapping(value="/games/players/{gpid}/ships", method=RequestMethod.POST)
@@ -166,7 +169,7 @@ public class SalvoController {
         }
 
         if (playerRepository.findByUserName(email) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap2("error","Name already in use"), HttpStatus.FORBIDDEN);
         }
 
         playerRepository.save(new Player(email, passwordEncoder.encode(password)));
@@ -193,11 +196,16 @@ public class SalvoController {
         return dto;
     }
 
+    private List<Salvo> orderSalvoes(Set<Salvo> salvoes){
+        return salvoes.stream().sorted(Comparator.comparing(Salvo::getTurnNumber)).collect(Collectors.toList());
+    }
+
     public List<Map<String, Object>> getAllHits(GamePlayer gamePlayer) {
         List<Map<String, Object>> listaDeDTO = new ArrayList<>();
 
         int carrierDMG = 0, battleshipDMG = 0, submarineDMG = 0, destroyerDMG = 0, patrolboatDMG = 0;
-        for (Salvo salvo: gamePlayer.getSalvos()) {
+        List<Salvo> salvos = orderSalvoes(gamePlayer.getSalvos());
+        for (Salvo salvo: salvos) {
             int carrierHIT = 0, battleshipHIT = 0, submarineHIT = 0, destroyerHIT = 0, patrolboatHIT = 0;
             List<String> hitLocations = new ArrayList<>();
             for (Ship ship : getOpponent(gamePlayer).getShips()) {
@@ -300,7 +308,7 @@ public class SalvoController {
         dto.put("created", gamePlayer.getGame().getCreationDate());
         dto.put("gamePlayers", getAllGamePlayers(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships", getAllShips(gamePlayer.getShips()));
-        dto.put("salvoes", getAllSalvoes(gamePlayer.getSalvoes()));
+        dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvos().stream().map(this::makeSalvoDTO)).collect(Collectors.toList()));
         dto.put("hits", getHitsDTO(gamePlayer));
         return dto;
     }
@@ -361,6 +369,10 @@ public class SalvoController {
         }
         if (getOpponent(gamePlayer) == null) {
             return "WAITINGFOROPP";
+        }
+
+        if ((getOpponent(gamePlayer).getShips().size() == 0)) {
+            return "WAIT";
         }
 
         if ((gamePlayer.getSalvos().size() == getOpponent(gamePlayer).getSalvos().size()) &&
